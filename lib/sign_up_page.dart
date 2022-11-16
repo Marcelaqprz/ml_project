@@ -48,14 +48,14 @@ class _SignUpPageState extends State<SignUpPage> {
         TextField(
           controller: _usernameController,
           decoration:
-              InputDecoration(icon: Icon(Icons.person), labelText: 'Username'),
+              InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
         ),
 
         // Email TextField
         TextField(
           controller: _emailController,
           decoration:
-              InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
+              InputDecoration(icon: Icon(Icons.mail), labelText: 'Confirm email'),
         ),
 
         // Password TextField

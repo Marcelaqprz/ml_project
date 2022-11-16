@@ -71,19 +71,6 @@ class AuthService {
       final state = AuthState(authFlowStatus: AuthFlowStatus.verification);
       authStateController.add(state);
 
-      // 4
-      /*if (result.isSignUpComplete) {
-        loginWithCredentials(credentials);
-      } else {
-        // 5
-        this._credentials = credentials;
-
-        // 6
-        final state = AuthState(authFlowStatus: AuthFlowStatus.verification);
-        authStateController.add(state);
-        print('Actualizando estado - ${state}');
-      }*/
-      // 7
     } on AuthException catch (authError) {
       print('Failed to sign up - ${authError.message}');
     }
