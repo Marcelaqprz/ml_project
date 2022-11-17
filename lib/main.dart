@@ -7,6 +7,8 @@ import 'package:ml_project/auth_service.dart';
 import 'package:ml_project/login_page.dart';
 import 'package:ml_project/sign_up_page.dart';
 import 'package:ml_project/verification_page.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'models/ModelProvider.dart';
 
 void main() {
   runApp(MyApp());
@@ -80,12 +82,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _configureAmplify() async {
-    _amplify.addPlugins([AmplifyAuthCognito(), AmplifyStorageS3()]);
+    _amplify.addPlugins([AmplifyAuthCognito(), AmplifyStorageS3(), AmplifyDataStore(modelProvider: ModelProvider.instance)]);
     try {
       await _amplify.configure(amplifyconfig);
       print('Successfully configured Amplify 🎉');
     } catch (e) {
       print('Could not configure Amplify ☠️');
     }
+    Amplify.addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
+    
   }
 }

@@ -4,6 +4,8 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ml_project/auth_credentials.dart';
 
+import 'models/User.dart';
+
 // 1
 enum AuthFlowStatus { login, signUp, verification, session }
 
@@ -65,6 +67,16 @@ class AuthService {
           password: credentials.password,
           options: CognitoSignUpOptions(userAttributes: userAttributes));
 
+      Future<void> savePost() async {
+        final newUser = User(
+          Nombre: credentials.username,
+          email: credentials.email,
+          contact: "6677589632",
+          password: credentials.password,
+        );
+
+        await Amplify.DataStore.save(newUser);
+      }
       this._credentials = credentials;
 
       // 6

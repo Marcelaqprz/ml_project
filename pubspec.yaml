@@ -48,6 +48,8 @@ dependencies:
   timeago: ^3.3.0
   url_launcher: ^6.1.6
   page_transition: ^2.0.9
+  amplify_datastore: '<1.0.0'
+
 
 dev_dependencies:
   flutter_test:
