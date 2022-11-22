@@ -1,14 +1,11 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
-import 'package:ml_project/amplifyconfiguration.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:ml_project/HomePage.dart';
 import 'package:ml_project/auth_service.dart';
 import 'package:ml_project/login_page.dart';
 import 'package:ml_project/sign_up_page.dart';
 import 'package:ml_project/verification_page.dart';
-import 'package:amplify_datastore/amplify_datastore.dart';
-import 'models/ModelProvider.dart';
+import 'package:ml_project/controller_bindings.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,18 +18,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _amplify = Amplify;
   final _authService = AuthService();
   @override
   void initState() {
     super.initState();
-    _configureAmplify();
     _authService.checkAuthStatus();
   }
 
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Photo Gallery App',
+    return GetMaterialApp(
+      initialBinding: ControllerBindings(),
+      title: 'ML Project',
       theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
       // 2
       home: StreamBuilder<AuthState>(
@@ -66,7 +62,11 @@ class _MyAppState extends State<MyApp> {
                     MaterialPage(
                         child: VerificationPage(
                             didProvideVerificationCode:
-                                _authService.verifyCode))
+                                _authService.verifyCode)),
+                  if (snapshot.data?.authFlowStatus ==
+                      AuthFlowStatus.session)
+                    MaterialPage(
+                      child: HomePageWidget()),
                 ],
                 onPopPage: (route, result) => route.didPop(result),
               );
@@ -81,15 +81,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _configureAmplify() async {
-    _amplify.addPlugins([AmplifyAuthCognito(), AmplifyStorageS3(), AmplifyDataStore(modelProvider: ModelProvider.instance)]);
-    try {
-      await _amplify.configure(amplifyconfig);
-      print('Successfully configured Amplify 🎉');
-    } catch (e) {
-      print('Could not configure Amplify ☠️');
-    }
-    Amplify.addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
-    
-  }
+
 }

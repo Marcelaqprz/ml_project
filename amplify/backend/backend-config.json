@@ -57,20 +57,19 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 365,
-              "apiKeyExpirationDate": "2023-11-17T06:53:01.448Z",
-              "description": "api key"
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
             }
           },
           "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            },
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
                 "userPoolId": "authmlproject"
               }
-            },
-            {
-              "authenticationType": "AWS_IAM"
             }
           ]
         }

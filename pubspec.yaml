@@ -49,6 +49,8 @@ dependencies:
   url_launcher: ^6.1.6
   page_transition: ^2.0.9
   amplify_datastore: '<1.0.0'
+  amplify_api: ^0.6.10
+  get: ^4.6.5
 
 
 dev_dependencies:

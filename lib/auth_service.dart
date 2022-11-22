@@ -67,16 +67,8 @@ class AuthService {
           password: credentials.password,
           options: CognitoSignUpOptions(userAttributes: userAttributes));
 
-      Future<void> savePost() async {
-        final newUser = User(
-          Nombre: credentials.username,
-          email: credentials.email,
-          contact: "6677589632",
-          password: credentials.password,
-        );
 
-        await Amplify.DataStore.save(newUser);
-      }
+
       this._credentials = credentials;
 
       // 6
@@ -89,6 +81,8 @@ class AuthService {
   }
 
   void verifyCode(String verificationCode) async {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.session);
+    authStateController.add(state);
     try {
       // 2
       final result = await Amplify.Auth.confirmSignUp(

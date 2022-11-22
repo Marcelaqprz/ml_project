@@ -28,7 +28,7 @@ import 'package:flutter/foundation.dart';
 class User extends Model {
   static const classType = const _UserModelType();
   final String id;
-  final String? _Nombre;
+  final String? _nombre;
   final String? _email;
   final String? _contact;
   final String? _password;
@@ -43,8 +43,8 @@ class User extends Model {
     return id;
   }
   
-  String? get Nombre {
-    return _Nombre;
+  String? get nombre {
+    return _nombre;
   }
   
   String? get email {
@@ -67,12 +67,12 @@ class User extends Model {
     return _updatedAt;
   }
   
-  const User._internal({required this.id, Nombre, email, contact, password, createdAt, updatedAt}): _Nombre = Nombre, _email = email, _contact = contact, _password = password, _createdAt = createdAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, nombre, email, contact, password, createdAt, updatedAt}): _nombre = nombre, _email = email, _contact = contact, _password = password, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory User({String? id, String? Nombre, String? email, String? contact, String? password}) {
+  factory User({String? id, String? nombre, String? email, String? contact, String? password}) {
     return User._internal(
       id: id == null ? UUID.getUUID() : id,
-      Nombre: Nombre,
+      nombre: nombre,
       email: email,
       contact: contact,
       password: password);
@@ -87,7 +87,7 @@ class User extends Model {
     if (identical(other, this)) return true;
     return other is User &&
       id == other.id &&
-      _Nombre == other._Nombre &&
+      _nombre == other._nombre &&
       _email == other._email &&
       _contact == other._contact &&
       _password == other._password;
@@ -102,7 +102,7 @@ class User extends Model {
     
     buffer.write("User {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("Nombre=" + "$_Nombre" + ", ");
+    buffer.write("nombre=" + "$_nombre" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("contact=" + "$_contact" + ", ");
     buffer.write("password=" + "$_password" + ", ");
@@ -113,10 +113,10 @@ class User extends Model {
     return buffer.toString();
   }
   
-  User copyWith({String? id, String? Nombre, String? email, String? contact, String? password}) {
+  User copyWith({String? id, String? nombre, String? email, String? contact, String? password}) {
     return User._internal(
       id: id ?? this.id,
-      Nombre: Nombre ?? this.Nombre,
+      nombre: nombre ?? this.nombre,
       email: email ?? this.email,
       contact: contact ?? this.contact,
       password: password ?? this.password);
@@ -124,7 +124,7 @@ class User extends Model {
   
   User.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _Nombre = json['Nombre'],
+      _nombre = json['nombre'],
       _email = json['email'],
       _contact = json['contact'],
       _password = json['password'],
@@ -132,15 +132,15 @@ class User extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'Nombre': _Nombre, 'email': _email, 'contact': _contact, 'password': _password, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'nombre': _nombre, 'email': _email, 'contact': _contact, 'password': _password, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'Nombre': _Nombre, 'email': _email, 'contact': _contact, 'password': _password, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'nombre': _nombre, 'email': _email, 'contact': _contact, 'password': _password, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField NOMBRE = QueryField(fieldName: "Nombre");
+  static final QueryField NOMBRE = QueryField(fieldName: "nombre");
   static final QueryField EMAIL = QueryField(fieldName: "email");
   static final QueryField CONTACT = QueryField(fieldName: "contact");
   static final QueryField PASSWORD = QueryField(fieldName: "password");
