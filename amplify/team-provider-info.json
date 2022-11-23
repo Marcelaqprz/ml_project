@@ -19,6 +19,9 @@
       },
       "storage": {
         "s3ae1ffcd9": {}
+      },
+      "api": {
+        "mlproject": {}
       }
     }
   }

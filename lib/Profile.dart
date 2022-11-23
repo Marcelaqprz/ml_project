@@ -9,6 +9,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ml_project/HomePage.dart';
 import 'auth_service.dart';
+import 'controller.dart';
 
 
 class ProfileWidget extends StatefulWidget {
@@ -331,7 +332,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       children: [
                         FFButtonWidget(
                           onPressed: () {
-                            print('Button pressed ...');
+                            Controller().readUser();
+                            //Controller().updateUser(Controller().userList[0].id!, yourNameController?.text.trim(), emailAddressController?.text.trim());
                           },
                           text: 'Guardar',
                           icon: Icon(
