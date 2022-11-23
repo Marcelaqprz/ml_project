@@ -10,9 +10,6 @@ import 'models/ModelProvider.dart';
 class Controller extends GetxController {
 
   final _amplify = Amplify;
-
-  //var userList = <User>[].obs;
-
   var userList = <User>[];
 
   @override
@@ -29,6 +26,13 @@ class Controller extends GetxController {
       print('Successfully configured Amplify 🎉');
     } catch (e) {
       print('Could not configure Amplify ☠️');
+    }
+
+    try {
+      await _amplify.Auth.signOut();
+      //print('-I- Successfully signOut 🎉');
+    } catch (e) {
+      //print('-I- No need to signOut 🎉');
     }
   }
 

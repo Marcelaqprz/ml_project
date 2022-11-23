@@ -5,6 +5,15 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ml_project/Profile.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+
 
 class HomePageWidget extends StatefulWidget {
     const HomePageWidget({Key? key}) : super(key: key);
@@ -15,6 +24,7 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +105,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '¿Quieres saber a qué raza pertenece \ntu peludo?',
+                      Text( '¿Quieres saber a que raza pertenece\n tu peludo?'
+                        ,
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         style: FlutterFlowTheme.of(context).bodyText1.override(
@@ -179,9 +189,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       child: Align(
                         alignment: AlignmentDirectional(0, 0),
                         child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
-                          },
+                          onPressed: uploadImage,
                           text: 'Cargar imagen',
                           icon: Icon(
                             Icons.image,
@@ -257,4 +265,39 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
     );
   }
+    Future<void> uploadImage() async {
+      // Select image from user's gallery
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+      if (pickedFile == null) {
+        safePrint('No image selected');
+        return;
+      }
+
+      // Upload image with the current time as the key
+      final key = DateTime.now().toString();
+      final file = File(pickedFile.path);
+      try {
+        final UploadFileResult result = await Amplify.Storage.uploadFile(
+          local: file,
+          key: key,
+          onProgress: (progress) {
+            safePrint('Fraction completed: ${progress.getFractionCompleted()}');
+          },
+        );
+        safePrint('Successfully uploaded image: ${result.key}');
+      } on StorageException catch (e) {
+        safePrint('Error uploading image: $e');
+      }
+    }
+
+    Future<void> listItems() async {
+      try {
+        final result = await Amplify.Storage.list();
+        final items = result.items;
+        safePrint('Got items: $items');
+      } on StorageException catch (e) {
+        safePrint('Error listing items: $e');
+      }
+    }
 }

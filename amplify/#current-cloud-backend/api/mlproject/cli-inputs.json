@@ -17,10 +17,6 @@
         "cognitoUserPoolId": "authmlproject"
       }
     ],
-    "conflictResolution": {
-      "defaultResolutionStrategy": {
-        "type": "AUTOMERGE"
-      }
-    }
+    "conflictResolution": {}
   }
 }

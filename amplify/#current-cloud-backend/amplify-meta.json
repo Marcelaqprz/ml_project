@@ -1,0 +1,124 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mlproject-dev-134915-authRole",
+      "UnauthRoleArn": "arn:aws:iam::181320547314:role/amplify-mlproject-dev-134915-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::181320547314:role/amplify-mlproject-dev-134915-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-mlproject-dev-134915-deployment",
+      "UnauthRoleName": "amplify-mlproject-dev-134915-unauthRole",
+      "StackName": "amplify-mlproject-dev-134915",
+      "StackId": "arn:aws:cloudformation:us-east-1:181320547314:stack/amplify-mlproject-dev-134915/6c0184b0-6455-11ed-aec9-0ed0bfc76125",
+      "AmplifyAppId": "ddf9u2mpe6prz"
+    }
+  },
+  "auth": {
+    "mlproject": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "output": {
+        "UserPoolId": "us-east-1_tHpwdsgxE",
+        "AppClientIDWeb": "7k2r08jaudubkb66v0hb5ue3u1",
+        "AppClientID": "pg0efenttmtj4tl5t7s9u92d6",
+        "IdentityPoolId": "us-east-1:4867ddfa-f378-4317-947b-ea0375b1deb1",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:181320547314:userpool/us-east-1_tHpwdsgxE",
+        "IdentityPoolName": "testAuthIdentityPool__dev",
+        "UserPoolName": "mlproject"
+      },
+      "lastPushTimeStamp": "2022-11-23T19:39:26.914Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-mlproject-dev-134915-deployment/amplify-cfn-templates/auth/mlproject-cloudformation-template.json",
+        "logicalId": "authmlproject"
+      }
+    }
+  },
+  "storage": {
+    "s3ae1ffcd9": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "output": {
+        "BucketName": "mlproject2fd08a036aae4bb89a6867ac0ea73535134915-dev",
+        "Region": "us-east-1"
+      },
+      "lastPushTimeStamp": "2022-11-23T19:39:26.921Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-mlproject-dev-134915-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3ae1ffcd9"
+      }
+    }
+  },
+  "api": {
+    "mlproject": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "mlproject",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            }
+          },
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            },
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authmlproject"
+              }
+            }
+          ]
+        },
+        "GraphQLAPIIdOutput": "2nbrmn6exjh7zekuxkiqx4q7tq",
+        "GraphQLAPIEndpointOutput": "https://wp52pitwvbcs7n6b2aqfaxwlu4.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-q3ug2xu4ovb5vd7rqga3cwxg5q"
+      },
+      "lastPushTimeStamp": "2022-11-23T19:39:27.291Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-mlproject-dev-134915-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apimlproject"
+      },
+      "lastPushDirHash": "q/AvFzPMWP9AO2pJta59GQp86eA="
+    }
+  }
+}

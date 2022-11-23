@@ -51,6 +51,7 @@ dependencies:
   amplify_datastore: '<1.0.0'
   amplify_api: ^0.6.10
   get: ^4.6.5
+  image_picker: ^0.8.6
 
 
 dev_dependencies:
