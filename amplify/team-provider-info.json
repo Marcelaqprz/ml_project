@@ -22,6 +22,9 @@
       },
       "api": {
         "mlproject": {}
+      },
+      "function": {
+        "mlproject423f2cc1": {}
       }
     }
   }

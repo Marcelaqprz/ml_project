@@ -119,6 +119,27 @@
         "logicalId": "apimlproject"
       },
       "lastPushDirHash": "q/AvFzPMWP9AO2pJta59GQp86eA="
+    },
+    "api24112022": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "mlproject423f2cc1",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    }
+  },
+  "function": {
+    "mlproject423f2cc1": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   }
 }

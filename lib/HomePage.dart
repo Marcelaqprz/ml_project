@@ -7,13 +7,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ml_project/Profile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:http/http.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
-
+import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'package:ml_project/services/api_service.dart';
+import 'package:ml_project/prediction_model.dart';
 
 class HomePageWidget extends StatefulWidget {
     const HomePageWidget({Key? key}) : super(key: key);
@@ -23,8 +26,14 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
+late predictionModel? _predictionModel;
+final String endPoint = 'http://52.86.193.151:8000/clasify';
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final picker = ImagePicker();
+
+  void initState(){
+    _predictionModel = predictionModel(prediction: "");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -265,39 +274,55 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
     );
   }
-    Future<void> uploadImage() async {
-      // Select image from user's gallery
-      final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-      if (pickedFile == null) {
-        safePrint('No image selected');
-        return;
-      }
+  Dio dio = new Dio();
+  Future<void> uploadImage() async {
+    // Select image from user's gallery
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-      // Upload image with the current time as the key
-      final key = DateTime.now().toString();
-      final file = File(pickedFile.path);
-      try {
-        final UploadFileResult result = await Amplify.Storage.uploadFile(
-          local: file,
-          key: key,
-          onProgress: (progress) {
-            safePrint('Fraction completed: ${progress.getFractionCompleted()}');
-          },
-        );
-        safePrint('Successfully uploaded image: ${result.key}');
-      } on StorageException catch (e) {
-        safePrint('Error uploading image: $e');
-      }
+    if (pickedFile == null) {
+       safePrint('No image selected');
+       return;
     }
+  // Upload image with the current time as the key
+    final key = DateTime.now().toString();
+    final file = File(pickedFile.path);
+    _predictionModel = (await ApiService().getImg(pickedFile.path));
+    try {
+      final UploadFileResult result = await Amplify.Storage.uploadFile(
+        local: file,
+        key: key,
+        onProgress: (progress) {
+          safePrint('Fraction completed: ${progress.getFractionCompleted()}');
+        },
+      );
+      safePrint('Successfully uploaded image: ${result.key}');
+   } on StorageException catch (e) {
+        safePrint('Error uploading image: $e');
+   }
+  }
+
+
 
     Future<void> listItems() async {
-      try {
+    try {
         final result = await Amplify.Storage.list();
         final items = result.items;
         safePrint('Got items: $items');
-      } on StorageException catch (e) {
+    } on StorageException catch (e) {
         safePrint('Error listing items: $e');
-      }
+        }
+    }
+
+    Future<void> getDownloadUrl() async {
+        try {
+            final result = await Amplify.Storage.getUrl(key: 'ExampleKey');
+        // NOTE: This code is only for demonstration
+        // Your debug console may truncate the printed url string
+        safePrint('Got URL: ${result.url}');
+       } on StorageException catch (e) {
+        safePrint('Error getting download URL: $e');
+        }
     }
 }
+

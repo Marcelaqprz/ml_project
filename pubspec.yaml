@@ -52,6 +52,9 @@ dependencies:
   amplify_api: ^0.6.10
   get: ^4.6.5
   image_picker: ^0.8.6
+  dio: ^4.0.6
+  http: ^0.13.5
+  html: ^0.15.1
 
 
 dev_dependencies:
