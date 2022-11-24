@@ -295,10 +295,21 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         },
       );
 
-      //var url = Uri.parse('http://52.86.193.151:8000/clasify');
-      //var response = await http.post(url, body: result);
-      //var response = await http.post(url, body: {'file: file, 'filename':key});
+      var url = Uri.parse('http://52.86.193.151:8000/clasify');
+      //var response = await http.post(url, body: {'file': file});
       //safePrint('status image: ${response.statusCode}');
+
+      // Send the file to the url as form data and get the response
+      final request = http.MultipartRequest('POST', url);
+      final multipartFile = http.MultipartFile.fromBytes(
+        'file',
+        file.readAsBytesSync(),
+        filename: key,
+      );
+      request.files.add(multipartFile);
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      safePrint('status image: ${response.statusCode}');
 
       safePrint('Successfully uploaded image: ${result.key}');
    } on StorageException catch (e) {
