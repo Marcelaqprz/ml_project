@@ -26,13 +26,13 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-late predictionModel? _predictionModel;
-final String endPoint = 'http://52.86.193.151:8000/clasify';
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final picker = ImagePicker();
 
+  late String imagePath;
+
   void initState(){
-    _predictionModel = predictionModel(prediction: "");
+    imagePath = "empty";
   }
 
   @override
@@ -176,12 +176,7 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/puppy.jpg',
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+                    (imagePath == "empty") ? Image.asset('assets/images/puppy.jpg',width: 200,height: 200,fit: BoxFit.cover) : Image.file(File(imagePath),width: 200,height: 200,fit: BoxFit.cover),
                   ],
                 ),
                 Container(
@@ -279,6 +274,7 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
     // Select image from user's gallery
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
+
     if (pickedFile == null) {
        safePrint('No image selected');
        return;
@@ -286,6 +282,9 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
   // Upload image with the current time as the key
     final key = DateTime.now().toString();
     final file = File(pickedFile.path);
+
+    imagePath = pickedFile.path;
+    setState((){});
 
     try {
       final UploadFileResult result = await Amplify.Storage.uploadFile(
@@ -299,9 +298,8 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
       //var url = Uri.parse('http://52.86.193.151:8000/clasify');
       //var response = await http.post(url, body: result);
       //var response = await http.post(url, body: {'file: file, 'filename':key});
+      //safePrint('status image: ${response.statusCode}');
 
-
-      safePrint('status image: ${response.statusCode}');
       safePrint('Successfully uploaded image: ${result.key}');
    } on StorageException catch (e) {
         safePrint('Error uploading image: $e');
