@@ -17,6 +17,11 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:ml_project/prediction_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomePageWidget extends StatefulWidget {
     const HomePageWidget({Key? key}) : super(key: key);
@@ -299,19 +304,40 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       //var response = await http.post(url, body: {'file': file});
       //safePrint('status image: ${response.statusCode}');
 
-      // Send the file to the url as form data and get the response
-      final request = http.MultipartRequest('POST', url);
-      final multipartFile = http.MultipartFile.fromBytes(
-        'file',
-        file.readAsBytesSync(),
-        filename: key,
-      );
+      var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
+      // get file length
+      var length = await file.length();
+
+      // string to uri
+      var uri = Uri.parse("http://52.86.193.151:8000/clasify");
+
+      // create multipart request
+      var request = new http.MultipartRequest("POST", uri);
+
+      // multipart that takes file
+      var multipartFile = new http.MultipartFile('file', stream, length,
+          filename: basename(file.path));
+
+      // add file to multipart
       request.files.add(multipartFile);
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
+
+      // send
+      var response = await request.send();
+
+      // Print the response
       safePrint('status image: ${response.statusCode}');
 
-      safePrint('Successfully uploaded image: ${result.key}');
+      // Retrieve the json response to JSON
+      var jsonResponse = await response.stream.bytesToString();
+      // Get the response as a JSON
+      var json = jsonDecode(jsonResponse);
+
+      // Get the prediction from the JSON
+      var prediction = json['prediction'];
+
+      // Safe print the prediction
+      safePrint('prediction: $prediction');
+
    } on StorageException catch (e) {
         safePrint('Error uploading image: $e');
    }
