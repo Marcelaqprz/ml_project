@@ -31,6 +31,7 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
+  late String predictionF;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final picker = ImagePicker();
 
@@ -38,6 +39,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   void initState(){
     imagePath = "empty";
+    predictionF = "";
   }
 
   @override
@@ -191,6 +193,24 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(predictionF,
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -289,7 +309,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     final file = File(pickedFile.path);
 
     imagePath = pickedFile.path;
-    setState((){});
+
 
     try {
       final UploadFileResult result = await Amplify.Storage.uploadFile(
@@ -337,6 +357,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
       // Safe print the prediction
       safePrint('prediction: $prediction');
+
+      setState((){
+        predictionF = prediction;
+      });
 
    } on StorageException catch (e) {
         safePrint('Error uploading image: $e');
