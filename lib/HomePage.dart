@@ -15,8 +15,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
-import 'package:ml_project/services/api_service.dart';
 import 'package:ml_project/prediction_model.dart';
+import 'package:http/http.dart' as http;
 
 class HomePageWidget extends StatefulWidget {
     const HomePageWidget({Key? key}) : super(key: key);
@@ -275,7 +275,6 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
     );
   }
 
-  Dio dio = new Dio();
   Future<void> uploadImage() async {
     // Select image from user's gallery
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -287,7 +286,7 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
   // Upload image with the current time as the key
     final key = DateTime.now().toString();
     final file = File(pickedFile.path);
-    _predictionModel = (await ApiService().getImg(pickedFile.path));
+
     try {
       final UploadFileResult result = await Amplify.Storage.uploadFile(
         local: file,
@@ -296,33 +295,17 @@ final String endPoint = 'http://52.86.193.151:8000/clasify';
           safePrint('Fraction completed: ${progress.getFractionCompleted()}');
         },
       );
+
+      //var url = Uri.parse('http://52.86.193.151:8000/clasify');
+      //var response = await http.post(url, body: result);
+      //var response = await http.post(url, body: {'file: file, 'filename':key});
+
+
+      safePrint('status image: ${response.statusCode}');
       safePrint('Successfully uploaded image: ${result.key}');
    } on StorageException catch (e) {
         safePrint('Error uploading image: $e');
    }
   }
-
-
-
-    Future<void> listItems() async {
-    try {
-        final result = await Amplify.Storage.list();
-        final items = result.items;
-        safePrint('Got items: $items');
-    } on StorageException catch (e) {
-        safePrint('Error listing items: $e');
-        }
-    }
-
-    Future<void> getDownloadUrl() async {
-        try {
-            final result = await Amplify.Storage.getUrl(key: 'ExampleKey');
-        // NOTE: This code is only for demonstration
-        // Your debug console may truncate the printed url string
-        safePrint('Got URL: ${result.url}');
-       } on StorageException catch (e) {
-        safePrint('Error getting download URL: $e');
-        }
-    }
 }
 
