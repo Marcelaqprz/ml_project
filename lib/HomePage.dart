@@ -39,7 +39,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   void initState(){
     imagePath = "empty";
-    predictionF = "";
+    predictionF = "empty";
   }
 
   @override
@@ -199,7 +199,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(predictionF,
+                      Text(
+                        (predictionF == "empty") ? "":predictionF,
                         textAlign: TextAlign.center,
                         maxLines: 3,
                         style: FlutterFlowTheme.of(context).bodyText1.override(
